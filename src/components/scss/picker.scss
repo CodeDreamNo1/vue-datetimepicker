@@ -1,0 +1,18 @@
+.mo-picker {
+  background-color: #fff;
+  color: $color-text;
+  border: 1px solid $color-border;
+  box-shadow: 0 2px 12px 0 rgba(#000, .1);
+  margin: 5px 0;
+  line-height: 1.5;
+  position: absolute;
+}
+
+.mo-picker-wrap,
+.mo-picker__toggle{
+  display: inline-block;
+}
+.mo-picker__toggle {
+  margin: 0;
+  padding: 0;
+}

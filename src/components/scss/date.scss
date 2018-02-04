@@ -135,3 +135,16 @@
     pointer-events: none;
   }
 }
+
+.mo-datepicker__toggle{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.mo-datepicker__picker {
+  .mo-datepicker__foot {
+    border-top: 1px solid $color-border;
+    padding: 10px;
+    text-align: right;
+  }
+}

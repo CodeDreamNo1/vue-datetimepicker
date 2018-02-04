@@ -1,0 +1,19 @@
+.mo-input {
+  display: inline-block;
+  border: 1px solid $color-border;
+  font-family: $font-family;
+  outline: none;
+  padding: 5px 8px;
+  line-height: 22px;
+  color: inherit;
+  appearance: none;
+  &:not(:disabled){
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+  &:disabled {
+    border-color: $color-border;
+    pointer-events: none;
+  }
+}

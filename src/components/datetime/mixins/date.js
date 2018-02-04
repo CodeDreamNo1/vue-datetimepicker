@@ -178,8 +178,8 @@ export default {
     setValueMap() {
       if (this.value) {
         const map = Moment.getDateMap(this.value)
-        this.original = map
-        this.date = map
+        this.original = {...map}
+        this.date = {...map}
       } else {
         this.original = Object.create(null)
         this.date = Moment.getDateMap(new Date())
@@ -187,12 +187,11 @@ export default {
 
       //$开头的为当前初始值
       this.date.$year = this.date.$month = this.date.$date = this.date.$activeDate = ''
-      
       if (this.value) {
         this.date.$year = this.date.year
         this.date.$month = this.date.month
         this.date.$date = this.date.date
-        this.date.$activeDate = getDateString(this.date.$year, this.date.$month, this.data.$date)
+        this.date.$activeDate = getDateString(this.date.$year, this.date.$month, this.date.$date)
       }
 
     },
