@@ -327,7 +327,7 @@ export default {
         maxDate
       } = this
       const date = getDateString(this.date.year, month, 1)
-      return date < minDate.date || date > maxDate.date
+      return date < minDate.fulldate || date > maxDate.fulldate
     },
 
     //切换面板

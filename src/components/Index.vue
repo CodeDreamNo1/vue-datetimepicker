@@ -37,7 +37,7 @@ export default {
     return {
       date : '2018-02-05',
       msg: 'Welcome to Your Vue.js App',
-      today : '123',
+      today : '2018-06-05 12:00:00',
       minDate : new Date()
     }
   }
