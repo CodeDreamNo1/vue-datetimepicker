@@ -1,3 +1,6 @@
+import fecha from './fecha'
+
+
 /**
  * 补零
  * @param  {Number} number  被操作数
@@ -18,7 +21,6 @@ const fillZero = (number, figures = 2) => {
 }
 
 
-
 /**
  * 获取一个日期实例
  * @param  {Any} date
@@ -33,19 +35,41 @@ const parseDate = date => {
   if (/^\d+$/.test(date))
     return new Date(parseInt(date, 10))
 
-  //String
-  if (!date || !date.trim()) {
-    throw new Error('date必须是一个可被转换为日期的类型')
-  }
+  if (typeof date !== 'string') {
+    return new Date()
+  }  
 
   date = date.trim()
-    .replace(/\.\d+/, '') 
-    .replace(/-/g, '/')  
+    .replace(/\.\d+/, '')
+    .replace(/-/g, '/')
     .replace(/T/, ' ')
     .replace(/Z/, ' UTC')
     .replace(/([\+\-]\d\d)\:?(\d\d)/, ' $1$2')
   return new Date(date)
 }
+
+
+const isDate = date => {
+  if (date === null || date === void 0) return false
+  if (isNaN(parseDate(date).getTime())) return false
+  return true
+}
+
+
+const toDate = function(date) {
+  return isDate(date) ? new Date(date) : null
+}
+
+const formatDate = function(date, format, i18n) {
+  date = toDate(date)
+  if (!date) return ''
+  return fecha.format(date, format || 'yyyy-MM-dd', i18n)
+}
+
+const parseDateByFormat = function(string, format, i18n) {
+  return fecha.parse(string, format || 'yyyy-MM-dd', i18n)
+}
+
 
 
 /**
@@ -61,7 +85,7 @@ const getDateMap = date => {
     hour: date.getHours(),
     minute: date.getMinutes(),
     second: date.getSeconds(),
-    millisecond: date.getMilliseconds() 
+    millisecond: date.getMilliseconds()
   }
 }
 
@@ -99,5 +123,7 @@ export {
   getDateMap,
   getFirstDayInMonth,
   getDaysInMonth,
-  getWeekByDate
+  getWeekByDate,
+  formatDate,
+  parseDateByFormat
 }

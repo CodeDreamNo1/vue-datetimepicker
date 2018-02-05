@@ -1,4 +1,6 @@
-import * as Moment from './moment'
+import * as Moment from '../utils/moment'
+//默认语言包
+import defaultsLocal from './lang'
 
 const MONTH_VIEW_DAYS = 42
 const MIN_YEAR = 1900
@@ -6,41 +8,30 @@ const MAX_YEAR = 2999
 
 const getDateString = (year, month, date) => [year, Moment.fillZero(month), Moment.fillZero(date)].join('-')
 
-//默认语言包
-const defaultsLocal = {
-  weeks: ['日', '一', '二', '三', '四', '五', '六'],
-  months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-  unit: {
-    year: '年',
-    month: '月'
-  }
-}
-
 export default {
   name: 'mo-date',
   props: {
-    
     //默认值
-    value: [String, Number, Date],
-    
+    value: {},
     //最小日期
     min: {
-      type: [String, Number, Object],
       default: '1900-01-01'
     },
-    
     //最大日期
     max: {
-      type: [String, Number, Object],
       default: '2999-12-31'
     },
-
     //允许自定义预言包传入，方便修改语言
     locals: {
       type: Object,
       default () {
         return defaultsLocal
       }
+    },
+    //格式化
+    format : {
+      type : String,
+      default : 'yyyy-MM-dd'
     }
   },
   data() {
@@ -177,7 +168,11 @@ export default {
     //设置初始值
     setValueMap() {
       if (this.value) {
-        const map = Moment.getDateMap(this.value)
+        let value = this.value
+        if (typeof value === 'string') {
+          value = Moment.parseDateByFormat(value, this.format, this.lang)
+        }
+        const map = Moment.getDateMap(value)
         this.original = {...map}
         this.date = {...map}
       } else {
@@ -198,8 +193,16 @@ export default {
 
     //设置最小最大值
     setMinMaxMap() {
-      const minDate = this.min ? Moment.parseDate(this.min) : 0
-      const maxDate = this.max ? Moment.parseDate(this.max) : 0
+      let {min, max} = this 
+      if (min && typeof min === 'string') {
+        min = Moment.parseDateByFormat(min, this.format, this.lang)
+      }
+      if (max && typeof max === 'string') {
+        max = Moment.parseDateByFormat(max, this.format, this.lang)
+      }
+
+      const minDate = this.min ? Moment.parseDate(min) : 0
+      const maxDate = this.max ? Moment.parseDate(max) : 0
       let minYear = MIN_YEAR,
         minMonth = 1,
         minDay = 1,
@@ -368,8 +371,9 @@ export default {
       this.date.year = this.date.$year = date.year
       this.date.month = this.date.$month = date.month
       this.date.$activeDate = getDateString(date.year, date.month, date.date)
-      this.$emit('onChange', this.date.$activeDate)
-      this.$emit('input', this.date.$activeDate)
+      const activeDate = Moment.formatDate(this.date.$activeDate, this.format, this.lang)
+      this.$emit('onChange', activeDate)
+      this.$emit('input', activeDate)
      }
   },
 
@@ -392,5 +396,4 @@ export default {
       this.setMinMaxMap()
     }
   }
-
 }

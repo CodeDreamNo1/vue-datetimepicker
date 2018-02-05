@@ -28,7 +28,7 @@
   .mo-time__scroller {
   }
   .mo-time__items {
-    height: 180px;
+    height: 150px;
     overflow-y: auto;
   }
   .mo-time__item {
@@ -39,7 +39,6 @@
     overflow: hidden;
     text-align: center;
     cursor: pointer;
-    transition: all .2s;
     &:hover {
       color: $color-primary;
     }
@@ -52,6 +51,5 @@
       color: $color-disabled;
       pointer-events: none;
     }
-
   }
 }

@@ -1,27 +1,43 @@
-import * as Moment from './moment'
+import * as Moment from '../utils/moment'
+
+//默认语言包
+import defaultsLocal from './lang'
 
 export default {
   props: {
     value: {},
     min: {},
     max: {},
-    readonly : {
-      type : Boolean,
-      default : true
+    readonly: {
+      type: Boolean,
+      default: false
     },
-    disabled : Boolean
+    disabled: Boolean,
+    //允许自定义预言包传入，方便修改语言
+    locals: {
+      type: Object,
+      default () {
+        return defaultsLocal
+      }
+    },
+    //格式化
+    format: {
+      type: String,
+      default: 'yy-MM-dd HH:mm:ss'
+    }
   },
   data() {
     return {
-      datetime : '',
+      datetime: '',
       date: '',
       time: '',
-      originalDate : '',
-      originalTime : '',
-      minDate : '',
-      maxDate : '',
+      originalDate: '',
+      originalTime: '',
+      minDate: '',
+      maxDate: '',
       show: false,
-      timeShow: false
+      timeShow: false,
+      lang: Object.assign({}, defaultsLocal, this.locals),
     }
   },
   methods: {
@@ -32,6 +48,10 @@ export default {
       this.ensure()
     },
     ensure() {
+      if (this.disabled) {
+        this.show = false
+        return
+      }
       if (!this.date || !this.time) {
         const map = this.getDateObj(new Date())
         if (!this.date) {
@@ -41,7 +61,8 @@ export default {
           this.time = this.originalTime = map.time
         }
       }
-      this.$emit('input', this.date + ' ' + this.time)
+      const datetime = Moment.formatDate(this.date + ' ' + this.time, this.format, this.lang)
+      this.$emit('input', datetime)
       this.show = false
     },
     timeCancel() {
@@ -54,16 +75,22 @@ export default {
       this.timeShow = false
     },
 
-    getDateObj (value) {
+    getDateObj(value) {
       if (!value) {
         return
       }
-      let date = '', time = '', datetime = ''
+      let date = '',
+        time = '',
+        datetime = ''
       try {
+        if (typeof value === 'string') {
+          value = Moment.parseDateByFormat(value, this.format, this.lang)
+        }
+
         const map = Moment.getDateMap(value)
         date = [map.year, Moment.fillZero(map.month), Moment.fillZero(map.date)].join('-')
-        time = [Moment.fillZero(map.hour),Moment.fillZero(map.minute),Moment.fillZero(map.second)].join(':')
-        datetime = date + ' ' + time
+        time = [Moment.fillZero(map.hour), Moment.fillZero(map.minute), Moment.fillZero(map.second)].join(':')
+        datetime = Moment.formatDate(date + ' ' + time, this.format, this.lang)
       } catch (e) {
         throw new Error(e)
       }
@@ -79,11 +106,18 @@ export default {
       if (map) {
         this.date = this.originalDate = map.date
         this.time = this.originalTime = map.time
-        this.datetime = map.datetime
       }
+
+      if (this.minDate && this.date < this.minDate) {
+        this.date = this.minDate
+      }
+      if (this.maxDate && this.date > this.maxDate) {
+        this.date = this.maxDate
+      }
+      this.datetime = Moment.formatDate(this.date + ' ' + this.time, this.format, this.lang)
     },
 
-    setMinMax () {
+    setMinMax() {
       if (this.min) {
         const map = this.getDateObj(this.min)
         this.minDate = map.date
@@ -93,29 +127,39 @@ export default {
         this.maxDate = map.date
       }
     },
-    onTimeHide () {
+    onTimeHide() {
       if (!this.timeShow) {
         this.timeCancel()
       }
     },
-    onTimeShow () {
+    onTimeShow() {
 
+    },
+    onDateTimeChange() {
+      if (this.readonly || this.disabled)
+        return
+      const datetime = this.getDateObj(this.datetime)
+      this.datetime = datetime.datetime
+      this.date = datetime.date
+      this.time = datetime.time
+      this.ensure()
     }
   },
-  mounted () {
+  mounted() {
+    this.setMinMax()
     this.setValue()
   },
-  watch : {
-    value () {
+  watch: {
+    value() {
       this.setValue()
     },
-    min () {
+    min() {
       this.setMinMax()
     },
-    max () {
+    max() {
       this.setMinMax()
     },
-    date () {
+    date() {
       //originalDate暂时没有取消操作，和date保持一致即可
       this.originalDate = this.date
       if (this.date && !this.time) {
@@ -123,14 +167,17 @@ export default {
         this.time = this.originalTime = map.time
       }
     },
-    time () {
+    time() {
       if (this.time && !this.date) {
         const map = this.getDateObj(new Date())
         this.date = this.originalDate = map.date
       }
     },
-    show () {
+    show() {
       this.timeShow = false
-    }
+    },
+    locals() {
+      this.lang = Object.assign({}, defaultsLocal, this.locals)
+    },
   }
 }

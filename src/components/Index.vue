@@ -13,7 +13,7 @@
         <mo-time-picker />
       </div>
       <div class="demo">
-          <mo-datetime-picker v-model="today" />
+          <mo-datetime-picker v-model="today" :min="minDate"/>
         </div>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
     return {
       date : '2018-02-05',
       msg: 'Welcome to Your Vue.js App',
-      today : new Date()
+      today : '123',
+      minDate : new Date()
     }
   }
 }

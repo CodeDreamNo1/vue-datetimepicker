@@ -1,9 +1,15 @@
-import * as Moment from './moment'
+import * as Moment from '../utils/moment'
+
 const TIME_REG = /^(\d{1,2})(\:(\d{1,2}))?(\:(\d{1,2}))?$/
 export default {
   name : 'mo-time',
   props : {
-    value : [String, Number, Object]
+    value : {},
+    //格式化
+    format : {
+      type : String,
+      default : 'hh:mm:ss'
+    }
   },
   data () {
     return {
@@ -52,17 +58,18 @@ export default {
       this.time['minute'] =  this.time['minute'] === '' ? now.getMinutes() : this.time['minute']
       this.time['second'] =  this.time['second'] === '' ? now.getSeconds() : this.time['second']
       const time = [Moment.fillZero(this.time.hour), Moment.fillZero(this.time.minute), Moment.fillZero(this.time.second)].join(':')
-      this.$emit('onChange', time)
-      this.$emit('input', time)
+      const activeTime = Moment.formatDate(`1900-01-01 ${time}`, this.format)
+      this.$emit('onChange', activeTime)
+      this.$emit('input', activeTime)
+      this.scroll(type)
     },
     scroll(exclude) {
-      // const {hour, minute, second} = this.time
-      // const {hour : $hour, minute : $minute, second : $second} = this.$refs
-      // const height = ($hour || $minute || $second).parentNode.offsetHeight || 210
-      // const offset = ($hour || $minute || $second).querySelector('li').offsetHeight || 30
-      // $hour && ($hour.scrollTop = (hour || 0) * height)
-      // $minute && ($minute.scrollTop = (minute || 0) * height)
-      // $second && ($second.scrollTop = (second || 0) * height)
+      const {hour, minute, second} = this.time
+      const {hour : $hour, minute : $minute, second : $second} = this.$refs
+      const height = ($hour || $minute || $second).querySelector('li').offsetHeight || 30
+      exclude !== 'hour' && $hour && ($hour.scrollTop = (hour - 2) * height)
+      exclude !== 'minute' && $minute && ($minute.scrollTop = (minute - 2) * height)
+      exclude !== 'second' && $second && ($second.scrollTop = (second - 2) * height)
     },
   },
   mounted () {
