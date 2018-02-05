@@ -6,22 +6,38 @@
      <div class="demo">
       <mo-date-picker v-model="date" />
     </div>
+    <div class="demo">
+      <mo-time />
+    </div>
+    <div class="demo">
+        <mo-time-picker />
+      </div>
+      <div class="demo">
+          <mo-datetime-picker v-model="today" />
+        </div>
   </div>
 </template>
 
 <script>
 import MoDate from './datetime/Date'
 import MoDatePicker from './datetime/DatePicker'
+import MoTime from './datetime/Time'
+import MoTimePicker from './datetime/TimePicker'
+import MoDatetimePicker from './datetime/DateTimePicker'
 export default {
   name: 'Demo',
   components : {
     MoDate,
-    MoDatePicker
+    MoDatePicker,
+    MoTime,
+    MoTimePicker,
+    MoDatetimePicker
   },
   data () {
     return {
       date : '2018-02-05',
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      today : new Date()
     }
   }
 }
@@ -31,9 +47,13 @@ export default {
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 .demo {
+  width: 25%;
+  display: inline-block;
   padding: 50px;
+  vertical-align: top;
 }
 </style>
 

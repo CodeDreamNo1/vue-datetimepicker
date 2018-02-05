@@ -369,6 +369,7 @@ export default {
       this.date.month = this.date.$month = date.month
       this.date.$activeDate = getDateString(date.year, date.month, date.date)
       this.$emit('onChange', this.date.$activeDate)
+      this.$emit('input', this.date.$activeDate)
      }
   },
 

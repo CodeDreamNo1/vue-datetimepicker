@@ -2,11 +2,11 @@
   <div class="mo-datepicker">
     <mo-picker v-model="show">
       <label class="mo-datepicker__toggle" slot="toggle">
-        <input type="text" class="mo-input" v-model.trim="date" />
+        <input type="text" class="mo-input" v-model.trim="time" />
       </label>
       <div class="mo-datepicker__picker">
         <div class="mo-datepicker__body">
-          <mo-date v-model="date" @onChange="onChange" v-if="show"/>
+          <mo-time v-model="time" @onChange="onChange" v-if="show"/>
         </div>
         <div class="mo-datepicker__foot">
           <button type="button" class="mo-btn mo-btn--text" @click.stop="cancel">取消</button>
@@ -18,12 +18,12 @@
 </template>
 <script>
   import MoPicker from '../picker/'
-  import MoDate from './Date'
+  import MoTime from './Time'
   export default {
-    name: 'mo-datepicker',
+    name: 'mo-timepicker',
     components: {
       MoPicker,
-      MoDate
+      MoTime
     },
     props: {
       //默认值
@@ -38,29 +38,29 @@
     data() {
       return {
         show: false,
-        date: this.value,
-        original : this.value
+        time: this.value,
       }
     },
     methods: {
       cancel() {
         this.show = false
-        this.date = this.value
+        this.time = this.value
       },
       ensure() {
-        if (!this.date) {
-          this.date = new Date()
+        if (!this.time) {
+          const now = new Date()
+          this.time = [now.getHours(), now.getMinutes(), now.getSeconds()].join(':')
         }
-        this.$emit('input', this.date)
+        this.$emit('input', this.time)
         this.show = false
       },
-      onChange(date) {
-        this.date = date
+      onChange(time) {
+        this.time = time
       }
     },
     watch : {
       value () {
-        this.date = this.value
+        this.time = this.value
       },
       show () {
         if (!this.show) {

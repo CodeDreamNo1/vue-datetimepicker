@@ -1,0 +1,21 @@
+.mo-scroller {
+  overflow: auto;
+}
+.mo-scroller::-webkit-scrollbar-track-piece { 
+  background-color: transparent;
+}
+.mo-scroller::-webkit-scrollbar { 
+  width: 6px;
+  height: 6px;
+}
+
+.mo-scroller:hover {
+  &::-webkit-scrollbar-thumb { 
+    background-color: #ced4e5;
+  }
+}
+
+.mo-scroller::-webkit-scrollbar-thumb:hover,
+.mo-scroller::-webkit-scrollbar-thumb:active {
+  background-color: #9ea8b4;
+}

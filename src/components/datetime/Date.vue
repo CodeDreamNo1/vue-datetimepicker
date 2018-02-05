@@ -59,9 +59,9 @@
   </div>
 </template>
 <script>
-  import DateMixins from './mixins/date'
+  import DateMixin from './mixins/date'
   export default {
-    mixins: [DateMixins]
+    mixins: [DateMixin]
   }
 
 </script>

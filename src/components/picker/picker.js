@@ -30,7 +30,7 @@ const getRect = function (el) {
  * @param {Element} el 
  * @returns {Object} 
  */
-const getHideElRect = el => {
+const getHideElSize = el => {
   const {
     display,
     visibility,
@@ -41,12 +41,15 @@ const getHideElRect = el => {
   el.style.visibility = 'hidden'
   el.style.position = 'absolute'
   el.style.zIndex = -1
-  const rect = getRect(el)
+  const width = el.offsetWidth, height = offset.offsetHeight
   el.style.display = display
   el.style.visibility = visibility
   el.style.position = position
   el.style.zIndex = zIndex
-  return rect
+  return {
+    width,
+    height
+  }
 }
 
 
@@ -81,11 +84,10 @@ export default {
         toggle,
         picker
       } = this.$refs
-      const toggleRect = getHideElRect(toggle)
-      const pickerRect = getHideElRect(picker)
+      const toggleRect = getRect(toggle)
       let top, left
-      top = toggleRect.top + toggleRect.height + this.margin
-      left = toggleRect.left
+      top = toggleRect.offset.top + toggleRect.height + this.margin
+      left = toggleRect.offset.left
       picker.style.cssText += `position:absolute;top:${top}px;left:${left}px;z-index:${getZIndex()};`
       this.visible = true
       this.$emit('show')

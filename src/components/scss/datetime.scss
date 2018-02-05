@@ -1,0 +1,62 @@
+.mo-datetime-picker {
+
+}
+.mo-datetime-picker__picker {
+  width: 302px;
+  .mo-date {
+    width: 100%;
+  }
+  .mo-datetime-picker__head,
+  .mo-datetime-picker__body,
+  .mo-datetime-picker__foot {
+    padding: 10px;
+  }
+
+  .mo-datetime-picker__head {
+    display: flex;
+    label {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+    .date-label{
+      flex: 1 1 auto;
+      margin-right: 5px;
+    }
+    .time-label {
+      flex: 1 1 auto;
+      margin-left: 5px;
+    }
+    .mo-input {
+      width: 100%;
+      height: 28px;
+      line-height: 16px;
+      font-size: 13px;
+    }
+  }
+  .mo-datetime-picker__body {
+    border-top: 1px solid $color-border;
+    border-bottom : 1px solid $color-border;
+  }
+  .mo-datetime-picker__foot {
+    text-align: right;
+    .mo-btn {
+      font-size: 13px;
+      height: 28px;
+      line-height: 16px;
+    }
+  }  
+}
+
+.mo-timepicker {
+  padding: 10px;
+  .mo-timepicker__foot {
+    margin-top: 10px;
+    text-align: right;
+    .mo-btn {
+      font-size: 13px;
+      height: 28px;
+      line-height: 16px;
+    }
+  }
+}
